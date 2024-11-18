@@ -1,0 +1,388 @@
+﻿@model AssetManagement.Models.Employee
+@using Microsoft.AspNetCore.Http
+@using System.Text.Json
+@inject IHttpContextAccessor HttpContextAccesssor
+@{
+    ViewData["Title"] = "Employees";
+}
+
+
+<div class="nav-info">
+    <a class="nav-text" asp-action="Dashboard" asp-controller="Home">
+        <ion-icon name="home-outline"></ion-icon>
+    </a>
+    <ion-icon name="chevron-forward-outline"></ion-icon>
+    <a class="nav-text" asp-action="Employees" asp-controller="Employee">
+        <span>Employees</span>
+    </a>
+
+</div>
+
+<div class="nav-container">
+    <h2 class="nav-title">Employees</h2>
+</div>
+
+<div class="container m-0" style="padding-left:0px;">
+    <div id="grid"></div>
+</div>
+
+<!-- Add Employee Modal -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEmployeeModalLabel">Add Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addEmployeeForm">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addEmployeeNo" class="form-label">Employee No:<span class="text-danger"> *</span></label>
+                            <input type="text" class="form-control m-0" id="addEmployeeNo" name="addEmployeeNo">
+                        </div>
+                        <div class="col">
+                            <label for="addFirstname" class="form-label">First Name:<span class="text-danger"> *</span></label>
+                            <input type="text" class="form-control m-0" id="addFirstname" name="addFirstname">
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addMiddlename" class="form-label">Middle Name:</label>
+                            <input type="text" class="form-control m-0" id="addMiddlename" name="addMiddlename">
+                        </div>
+                        <div class="col">
+                            <label for="addLastname" class="form-label">Last Name:<span class="text-danger"> *</span></label>
+                            <input type="text" class="form-control m-0" id="addLastname" name="addLastname">
+                        </div>
+
+
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addDepartmentName" class="form-label">Department Name:<span class="text-danger"> *</span></label>
+                            <select class="form-control  m-0" id="addDepartmentId" name="addDepartmentId">
+                                <option value="">Select Department</option>
+                                @foreach (var department in ViewBag.Departments)
+                                {
+                                    <option value="@department.DepartmentId">@department.DepartmentName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="addDesignation" class="form-label">Designation:<span class="text-danger"> *</span></label>
+                            <input type="text" class="form-control m-0" id="addDesignation" name="addDesignation">
+                        </div>
+
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addPhonenumber" class="form-label">Phone Number:<span class="text-danger"> *</span></label>
+                            <input type="tel" class="form-control m-0" id="addPhonenumber" name="addPhonenumber">
+                        </div>
+                        <div class="col">
+                            <label for="addEmail" class="form-label">Email:<span class="text-danger"> *</span></label>
+                            <input type="email" class="form-control m-0" id="addnewEmail" name="addnewEmail">
+                        </div>
+
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addnewPassword" class="form-label">Password:<span class="text-danger"> *</span></label>
+                            <input type="password" class="form-control m-0" id="addnewPassword" name="addnewPassword">
+                        </div>
+                        <div class="col">
+                            <label for="addCountryId" class="form-label">Country:<span class="text-danger"> *</span></label>
+                            <select class="form-control m-0" id="addCountryId" name="addCountryId">
+                                <option value="">Select Country</option>
+                                @* @foreach (var country in ViewBag.Countries)
+                                {
+                                <option value="@country.Countryid">@country.Countryname</option>
+                                } *@
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addStateId" class="form-label">State:<span class="text-danger"> *</span></label>
+                            <select class="form-control m-0" id="addStateId" name="addStateId">
+                                <option value="">Select Country First</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="addCityId" class="form-label">City:<span class="text-danger"> *</span></label>
+                            <select class="form-control m-0" id="addCityId" name="addCityId">
+                                <option value="">Select State First</option>
+
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addAddress" class="form-label">Address:<span class="text-danger"> *</span></label>
+                            <input type="text" class="form-control m-0" id="addAddress" name="addAddress">
+                        </div>
+
+                        <div class="col">
+                            <label for="addLoginenabled" class="form-label">Login Enabled:<span class="text-danger"> *</span></label>
+                            <select class="form-control m-0" id="addLoginenabled" name="addLoginenabled">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col ">
+                            <label for="addEmployeeImage" class="form-label">Employee Image:</label>
+                            <input type="file" class="form-control m-0" id="addEmployeeImage" name="addEmployeeImage">
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn  btn-secondary" id="closeadd" data-bs-dismiss="modal">Close</button>
+
+                <button type="button" class="btn all-button" id="saveEmployeeBtn">Save Employee</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Employee Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Employee</h5>
+                <button type="button" class="closeedit btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Edit Employee Form -->
+                <form id="editForm">
+                    <input type="hidden" id="editEmployeeId" name="editEmployeeId">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editEmployeeNo" class="form-label">Employee No:<span class="text-danger"> *</span></label>
+                            <input type="text" class="form-control" id="editEmployeeNo" name="editEmployeeNo" disabled >
+                        </div>
+                        <div class="col">
+                            <label for="editFirstname" class="form-label">First Name:<span class="text-danger"> *</span></label>
+                            <input type="text" class="form-control" id="editFirstname" name="editFirstname" required>
+                        </div>
+
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editMiddlename" class="form-label">Middle Name:<span class="text-danger"> *</span></label>
+                            <input type="text" class="form-control" id="editMiddlename" name="editMiddlename">
+                        </div>
+                        <div class="col">
+                            <label for="editLastname" class="form-label">Last Name:<span class="text-danger"> *</span></label>
+                            <input type="text" class="form-control" id="editLastname" name="editLastname" required>
+                        </div>
+
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editDepartmentName" class="form-label">Department Name:<span class="text-danger"> *</span></label>
+                            <select class="form-control" id="editDepartmentId" name="editDepartmentId">
+                                <option value="">Select Department</option>
+                                @foreach (var department in ViewBag.Departments)
+                                {
+                                    <option value="@department.DepartmentId">@department.DepartmentName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="editDesignation" class="form-label">Designation:<span class="text-danger"> *</span></label>
+                            <input type="text" class="form-control" id="editDesignation" name="editDesignation" required>
+                        </div>
+
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editEmail" class="form-label">Email:<span class="text-danger"> *</span></label>
+                            <input type="email" class="form-control" id="editEmail" name="editEmail" required>
+                        </div>
+                        <div class="col">
+                            <label for="editPhonenumber" class="form-label">Phone Number:<span class="text-danger"> *</span></label>
+                            <input type="tel" class="form-control" id="editPhonenumber" name="editPhonenumber" required>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editCountryId" class="form-label">Country:<span class="text-danger"> *</span></label>
+                            <select class="form-control" id="editCountryId" name="editCountryId">
+                                <option value="">Select Country</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="editStateId" class="form-label">State:<span class="text-danger"> *</span></label>
+                            <select class="form-control" id="editStateId" name="editStateId">
+                                <option value="">Select State</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editCityId" class="form-label">City:<span class="text-danger"> *</span></label>
+                            <select class="form-control" id="editCityId" name="editCityId">
+                                <option value="">Select City</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="editAddress" class="form-label">Address:<span class="text-danger"> *</span></label>
+                            <input type="text" class="form-control" id="editAddress" name="editAddress" required>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editLoginenabled" class="form-label">Login Enabled:<span class="text-danger"> *</span></label>
+                            <select class="form-select" id="editLoginenabled" name="editLoginenabled" required>
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary closeedit" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn all-button" id="saveChangesBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Delete Employee Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Delete Employee Form -->
+                <form id="deleteForm" method="post" action="">
+                    <input type="hidden" id="deleteEmployeeId" name="EmployeeId">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deleteEmployeeNo" class="form-label">Employee No:</label>
+                            <input type="text" class="form-control" id="deleteEmployeeNo" name="EmployeeNo" disabled>
+                        </div>
+                        <div class="col">
+                            <label for="deleteFirstname" class="form-label">First Name:</label>
+                            <input type="text" class="form-control" id="deleteFirstname" name="FirstName" disabled>
+                        </div>
+                       
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deleteMiddlename" class="form-label">Middle Name:</label>
+                            <input type="text" class="form-control" id="deleteMiddlename" name="MiddleName" disabled>
+                        </div>
+                        <div class="col">
+                            <label for="deleteLastname" class="form-label">Last Name:</label>
+                            <input type="text" class="form-control" id="deleteLastname" name="LastName" disabled>
+                        </div>
+                       
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deleteDepartmentName" class="form-label">Department Name:</label>
+                            <input type="text" class="form-control" id="deleteDepartmentName" name="DepartmentName" disabled>
+                        </div>
+                        <div class="col">
+                            <label for="deleteDesignation" class="form-label">Designation:</label>
+                            <input type="text" class="form-control" id="deleteDesignation" name="Designation" disabled>
+                        </div>
+                       
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deleteEmail" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="deleteEmail" name="Email" disabled>
+                        </div>
+                        <div class="col">
+                            <label for="deletePhonenumber" class="form-label">Phone Number:</label>
+                            <input type="tel" class="form-control" id="deletePhonenumber" name="Phonenumber" disabled>
+                        </div>
+                       
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deleteCountryName" class="form-label">Country Name:</label>
+                            <input type="text" class="form-control" id="deleteCountryName" name="CountryName" disabled>
+                        </div>
+                        <div class="col">
+                            <label for="deleteStateName" class="form-label">State Name:</label>
+                            <input type="text" class="form-control" id="deleteStateName" name="StateName" disabled>
+                        </div>
+                       
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deleteCityName" class="form-label">City Name:</label>
+                            <input type="text" class="form-control" id="deleteCityName" name="CityName" disabled>
+                        </div>
+                        <div class="col">
+                            <label for="deleteAddress" class="form-label">Address:</label>
+                            <input type="text" class="form-control" id="deleteAddress" name="Address" disabled>
+                        </div>
+                       
+                    </div>
+                    <div class="row mb-3">
+                    <div class="col">
+                        <label for="deleteLoginenabled" class="form-label">Login Enabled:</label>
+                        <input type="text" class="form-control" id="deleteLoginenabled" name="Loginenabled" disabled>
+                    </div>
+                    <div class="col">
+
+                    </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn all-button" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <script>
+        var modifierId = @Html.Raw(JsonSerializer.Serialize(HttpContextAccesssor.HttpContext!.Session.GetString("EmployeeId")));
+        var employeesData = @Html.Raw(ViewData["EmployeesJson"]);
+    </script>
+    <script src="~/js/employees.js" asp-append-version="true"></script>
+
+}

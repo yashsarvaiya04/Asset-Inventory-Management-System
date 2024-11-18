@@ -1,0 +1,34 @@
+﻿@model List<AssetManagement.Models.Log>
+@using Microsoft.AspNetCore.Http
+@using System.Text.Json
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Logs";
+}
+
+<div class="nav-info">
+    <a class="nav-text" asp-action="Dashboard" asp-controller="Home">
+        <ion-icon name="home-outline"></ion-icon>
+    </a>
+    <ion-icon name="chevron-forward-outline"></ion-icon>
+    <a class="nav-text" asp-action="Logs" asp-controller="Employee">
+        <span>Logs</span>
+    </a>
+</div>
+
+<div class="nav-container">
+    <h2 class="nav-title">Logs</h2>
+</div>
+
+<div class="container m-0">
+    <div id="grid"></div>
+</div>
+
+
+@section Scripts {
+    <script>
+        var modifierId = @Html.Raw(JsonSerializer.Serialize(HttpContextAccessor.HttpContext!.Session.GetString("EmployeeId")));
+    var logsData = @Html.Raw(ViewData["LogsJson"]);
+    </script>
+    <script src="~/js/logs.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,103 @@
+﻿@model List<AssetManagement.Models.Assetallocation>
+@{
+    ViewData["Title"] = "Asset Allocation";
+}
+
+
+<div class="nav-info">
+    <a class="nav-text" asp-action="Dashboard" asp-controller="Home">
+        <ion-icon name="home-outline"></ion-icon>
+    </a>
+    <ion-icon name="chevron-forward-outline"></ion-icon>
+    <a class="nav-text" asp-action="AssetAllocation" asp-controller="Asset">
+        <span>Asset Allocation</span>
+    </a>
+</div>
+
+<div class="nav-container">
+    <h2 class="nav-title">Asset Allocation</h2>
+</div>
+
+
+<div class="container-fluid">
+    <div id="grid"></div>
+</div>
+
+
+
+<div class="modal fade" id="assetAllocationModal" role="dialog" aria-labelledby="assetAllocationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assetAllocationModalLabel">Asset Allocation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="assetAllocationModalForm">
+                    <input type="number" class="form-control " id="allocationId" hidden>
+                    <div class="row mb-3">
+                        <div class="col-md">
+                            <label for="departmentId" class="form-label">Deparment Name:<span class="text-danger"> *</span></label>
+                            <select class="form-control" id="departmentId" name="departmentId">
+                                <option value="" disabled selected>Select Department</option>
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <label for="employeeId" class="form-label">Employee Name:<span class="text-danger"> *</span></label>
+                            <select class="form-control" id="employeeId" name="employeeId">
+                                <option value="" disabled selected>Select Employee</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md">
+                            <label for="categoryId" class="form-label">Category Name:<span class="text-danger"> *</span></label>
+                            <select class="form-control" id="categoryId" name="categoryId">
+                                <option value="" disabled selected>Select Category</option>
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <label for="subCategoryId" class="form-label">Sub Category Name:<span class="text-danger"> *</span></label>
+                            <select class="form-control" id="subCategoryId" name="subCategoryId">
+                                <option value="" disabled selected>Select Sub Category</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md">
+                            <label for="assetId" class="form-label">Asset Name:<span class="text-danger"> *</span></label>
+                            <select class="form-control" id="assetId" name="assetId">
+                                <option value="" disabled selected>Select Asset</option>
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="assignedDate" class="form-label">Assigned date:<span class="text-danger"> *</span></label>
+                                    <input type="date" class="form-control" id="assignedDate" name="assignedDate">
+                                </div>
+                                <div class="col freeDate" hidden>
+                                    <label for="freeDate" class="form-label">Free date:</label>
+                                    <input type="date" class="form-control" id="freeDate">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                <button type="button" class="all-button btn btn-primary" id="assetAllocationModalUpdate" aria-label="Update">Update</button>
+                <button type="button" class="all-button btn btn-primary" id="assetAllocationModalSubmit" aria-label="Submit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        const assetAllocationData = @Html.Raw(Json.Serialize(Model));
+    </script>
+    <script src="~/js/assetAllocation.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,210 @@
+﻿@using Npgsql;
+@inject IHttpContextAccessor HttpContextAccesssor
+@{
+    var httpContext = HttpContextAccesssor.HttpContext;
+    var employeeId = httpContext?.Session.GetInt32("EmployeeId");
+    var employeeImage = httpContext?.Session.GetString("EmployeeImage");
+    // string employeeImage = "abc";
+    // IConfiguration configuration = new ConfigurationBuilder()
+    //        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    //        .Build();
+
+    // string _connectionString = configuration.GetConnectionString("DefaultConnection")!;
+
+    // using NpgsqlConnection connection = new(_connectionString);
+    // using NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM getemployee(@EmployeeId)", connection);
+
+    // cmd.Parameters.AddWithValue("@EmployeeId", employeeId);
+    // connection.Open();
+    // using NpgsqlDataReader reader = cmd.ExecuteReader();
+
+    // if (reader.Read())
+    // {
+    //     //     // Extract employee image path or binary data from the reader
+    //     // employeeImage = reader.GetString(reader.GetOrdinal("employeeimage"));
+    //     employeeImage = reader.IsDBNull(reader.GetOrdinal("employeeimage")) ? "" : reader.GetString(reader.GetOrdinal("employeeimage"));
+    // }
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Asset Management System - Streamline your asset management process with our comprehensive solution. Track, manage, and optimize your assets efficiently. Asset management software for businesses.">
+    <meta name="keywords" content="asset management system, asset management software, asset tracking, asset optimization, asset administration, asset CRM, asset ERP">
+    <meta name="author" content="Amnex Infotechnologies Pvt. Ltd">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000">
+    <title>@ViewData["Title"] - AssetManagement</title>
+
+    <link rel="manifest" href="~/site.webmanifest" asp-append-version="true">
+
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/select2/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/sweetalert2/sweetalert2.min.css" />
+
+    <link rel="stylesheet" href="~/kendo/css/kendo.default-v2.min.css" />
+    <link rel="stylesheet" href="~/kendo/css/kendo.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="navigation">
+            <ul style="padding-left:0px;">
+                <li>
+                    <a asp-action="Home" asp-controller="Dashboard  -">
+                        <span class="icon" style="margin-top:8px;"><ion-icon name="logo-apple-appstore"></ion-icon></span>
+                        <img style="margin-top:-5px; margin-left:5px; height:100px;" src="~/images/assetManagement.png" alt="Amnex logo" />
+                    </a>
+                </li>
+
+                <li class="">
+                    <a asp-action="Dashboard" asp-controller="Home">
+                        <span class="icon "><ion-icon name="home-outline"></ion-icon></span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-action="Asset" asp-controller="Asset">
+                        <span class="icon"><ion-icon name="grid-outline"></ion-icon></span>
+                        <span class="title">Assets</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-action="AssetAllocation" asp-controller="Asset">
+                        <span class="icon"><ion-icon name="bag-add-outline"></ion-icon></span>
+                        <span class="title">Asset Allocation</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="AssetLocation" asp-controller="Asset">
+                        <span class="icon"><ion-icon name="location-outline"></ion-icon></span>
+                        <span class="title">Asset Location</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="Employees" asp-controller="Employee">
+                        <span class="icon"><ion-icon name="people-outline"></ion-icon></span>
+                        <span class="title">Employees</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-action="Category" asp-controller="Category">
+                        <span class="icon"><ion-icon name="pricetag-outline"></ion-icon></span>
+                        <span class="title">Categories</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-action="Supplier" asp-controller="Other">
+                        <span class="icon"><ion-icon name="cube-outline"></ion-icon></span>
+                        <span class="title">Suppliers</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-action="Manufacturer" asp-controller="Other">
+                        <span class="icon"><ion-icon name="business-outline"></ion-icon></span>
+                        <span class="title">Manufacturers</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-action="Maintenance" asp-controller="Asset">
+                        <span class="icon"><ion-icon name="construct-outline"></ion-icon></span>
+                        <span class="title">Maintenance</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-action="Logs" asp-controller="Employee">
+                        <span class="icon"><ion-icon name="analytics-outline"></ion-icon></span>
+                        <span class="title">Logs</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- main -->
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle"><ion-icon name="menu-outline"></ion-icon></div>
+                <div class="user-info dropdown">
+                    @if (employeeId != null && employeeId > 0)
+                    {
+                        @*<img src="/images/employeeImages/' + @HttpContextAccesssor.HttpContext!.Session.GetString("EmployeeImage") + '" style="max-width:60px;max-height:60px; border-radius: 50%;" />*@
+                        <p class="user-name">@HttpContextAccesssor.HttpContext!.Session.GetString("FirstName") @HttpContextAccesssor.HttpContext.Session.GetString("LastName")</p>
+                        <!-- User image -->
+                        <div class="dropdown-content">
+                            <a asp-action="UserProfile" asp-controller="Home" asp-route-employeeid="@employeeId" id="accountLinM">Account</a>
+                            <a asp-action="Logout" asp-controller="Home">Logout</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Redirect to login -->
+                        <script>window.location.href = "/Home/LoginPage";</script>
+                    }
+                </div>
+
+            </div>
+
+            <!-- Render Body -->
+            <div class="bodyCustom">
+                @RenderBody()
+
+                <div id="overlay" style="display: none;">
+                    <div class="loader" style="display: none;"></div>
+                </div>
+                <div class="modal fade" id="viewImageModal" tabindex="-1" aria-labelledby="viewImageModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="viewImageModalLabel">View Photo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container text-center">
+                                    <img id="viewImage" src="#" alt="View Photo" style="max-width: 100%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+    <script type="module" src="~/ionicons/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="~/ionicons/ionicons/ionicons.js"></script>
+    <script src="~/js/recaptcha.js"></script>
+
+
+       
+    @*kendo*@
+    <script src="~/kendo/js/kendo.all.min.js"></script>
+    <script src="~/kendo/js/kendo.aspnetmvc.min.js"></script>
+    <script src="~/kendo/js/jszip.min.js"></script>
+    @*kendo*@
+
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

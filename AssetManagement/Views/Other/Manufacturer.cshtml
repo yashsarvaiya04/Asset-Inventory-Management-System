@@ -1,0 +1,299 @@
+﻿@model AssetManagement.Models.Manufacturer
+@using Microsoft.AspNetCore.Http
+@using System.Text.Json;
+@inject IHttpContextAccessor HttpContextAccesssor
+@{
+    ViewData["Title"] = "Manufacture";
+}
+
+
+<div class="nav-info">
+    <a class="nav-text" asp-action="Dashboard" asp-controller="Home">
+        <ion-icon name="home-outline"></ion-icon>
+    </a>
+    <ion-icon name="chevron-forward-outline"></ion-icon>
+    <a class="nav-text" asp-action="Manufacturer" asp-controller="Other">
+        <span>Manufacturers</span>
+    </a>
+
+</div>
+
+<div class="nav-container">
+    <h2 class="nav-title">Manufacturers</h2>
+</div>
+
+<div class="container-fluid">
+    <div id="grid"></div>
+</div>
+
+
+<div class="modal fade" id="addManufactureModal" tabindex="-1" role="dialog" aria-labelledby="addManufactureModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addManufactureModalLabel">Add Manufacture</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addManufactureForm">
+                    <div class="row mb-3">
+                        <div class="col">
+                            @* <label for="addManufactureName" class="form-label">Manufacture Name:</label> *@
+
+                            <label for="addManufactureName" class="form-label">Manufacture Name:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="text" class="form-control" id="addManufactureName" name="addManufactureName">
+                        </div>
+
+                        <div class="col">
+                            <label for="addUrl" class="form-label">Manufacture Url:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="text" class="form-control" id="addUrl" name="addUrl">
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+
+
+                        <div class="col">
+                            <label for="addAddress" class="form-label">Manufacture Address:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="text" class="form-control" id="addAddress" name="addAddress">
+                        </div>
+
+                        <div class="col">
+                            <label for="addSupportPhoneNumber" class="form-label">Manufacture PhoneNumber:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="tel" class="form-control" id="addSupportPhoneNumber" name="addSupportPhonenumber">
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+
+                        <div class="col">
+                            <label for="addSupportEmail" class="form-label">Manufacture Email:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="email" class="form-control" id="addSupportEmail" name="addSupportEmail">
+                        </div>
+
+
+                        <div class="col">
+                            <label for="addCountryName" class="form-label">Country:</label>
+                            <select class="form-control" id="addCountryId" name="addCountryId">
+                                <option value="">Select Country</option>
+
+                            </select>
+                        </div>
+
+                        <div class="row mb-3">
+
+
+                            <div class="col">
+                                <label for="addStateName" class="form-label">State:</label>
+                                <select class="form-control" id="addStateId" name="addStateId" disabled>
+                                    <option value="addStateId">Select Country First</option> <!-- Default message -->
+                                </select>
+                            </div>
+
+                            <div class="col">
+                                <label for="addCityName" class="form-label">City:</label>
+                                <select class="form-control" id="addCityId" name="addCityId">
+                                    <option value="">Select State First</option> <!-- Default message -->
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn all-button" id="saveManufactureBtn">Save Manufacture</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Edit Manufacture Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Manufacture</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Edit Manufacture Form -->
+                <form id="editForm" method="post" action="">
+                    <input type="hidden" id="editManufactureId" name="ManufactureId">
+                    <div class="row mb-3">
+                        <div class="col">
+                            @* <label for="editManufacturename" class="form-label">Manufacture Name:</label> *@
+                            <label for="editManufacturename" class="form-label">Manufacture Name:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="text" class="form-control" id="editManufacturename" name="editManufacturename" required>
+                        </div>
+
+                        <div class="col">
+                            @* <label for="editUrl" class="form-label">Url:</label> *@
+                            <label for="editUrl" class="form-label">Manufacture Url:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="text" class="form-control" id="editUrl" name="editUrl" required>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+
+
+                        <div class="col">
+                            <label for="editAddress" class="form-label">Manufacture Address:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="text" class="form-control" id="editAddress" name="editAddress" required>
+                        </div>
+
+                        <div class="col">
+                            <label for="editSupportPhoneNumber" class="form-label">Manufacture PhoneNumber:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="tel" class="form-control" id="editSupportPhoneNumber" name="editSupportPhoneNumber" required>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+
+
+
+                        <div class="col">
+                            <label for="editSupportEmail" class="form-label">Manufacture Email:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="email" class="form-control" id="editSupportEmail" name="editSupportEmail" required>
+                        </div>
+
+                        <div class="col">
+                            <label for="editCountryId" class="form-label">Country:</label>
+                            <select class="form-control" id="editCountryId" name="CountryId">
+                                <option value="editCountryId">Select Country</option>
+                            </select>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="editStateId" class="form-label">State:</label>
+                                <select class="form-control" id="editStateId" name="StateId">
+                                    <option value="">Select State</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="editCityId" class="form-label">City:</label>
+                                <select class="form-control" id="editCityId" name="CityId">
+                                    <option value="">Select City</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn all-button" id="saveChangesBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Manufacture Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Manufacture</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Delete Manufacture Form -->
+                <form id="deleteForm" method="post" action="">
+                    <!-- Hidden input field for Manufacture ID -->
+                    <input type="hidden" id="deleteManufactureId" name="ManufactureId">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deleteManufactureName" class="form-label">Manufacture Name:</label>
+                            <input type="text" class="form-control" id="deleteManufactureName" name="Manufacture Name" disabled>
+                        </div>
+                        <div class="col">
+                            <label for="deleteUrl" class="form-label">Url:</label>
+                            <input type="text" class="form-control" id="deleteUrl" name="Url" disabled>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+
+                        <div class="col">
+                            <label for="deleteAddress" class="form-label">Address:</label>
+                            <input type="text" class="form-control" id="deleteAddress" name="Address" disabled>
+                        </div>
+
+
+                        <div class="col">
+                            <label for="deleteSupportPhoneNumber" class="form-label">Manufacture Phone Number:</label>
+                            <input type="tel" class="form-control" id="deleteSupportPhoneNumber" name="Support Phone Number" disabled>
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-3">
+
+                        <div class="col">
+                            <label for="deleteSupportEmail" class="form-label">Manufacture Email:</label>
+                            <input type="email" class="form-control" id="deleteSupportEmail" name="SupportEmail" disabled>
+                        </div>
+
+                        <div class="col">
+                            <label for="deleteCountryName" class="form-label">Country Name:</label>
+                            <input type="text" class="form-control" id="deleteCountryName" name="CountryName" disabled>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deleteStateName" class="form-label">State Name:</label>
+                            <input type="text" class="form-control" id="deleteStateName" name="StateName" disabled>
+                        </div>
+                        <div class="col">
+                            <label for="deleteCityName" class="form-label">City Name:</label>
+                            <input type="text" class="form-control" id="deleteCityName" name="CityName" disabled>
+                        </div>
+                    </div>
+
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn all-button" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <script>
+        var modifierId = @Html.Raw(JsonSerializer.Serialize(HttpContextAccesssor.HttpContext!.Session.GetString("EmployeeId")));
+        var manufacturesData = @Html.Raw(ViewData["ManufacturesJson"]);
+    </script>
+    <script src="~/js/manufacturer.js" asp-append-version="true"></script>
+
+}

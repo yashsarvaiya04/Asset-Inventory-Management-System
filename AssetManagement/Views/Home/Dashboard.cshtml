@@ -1,0 +1,104 @@
+﻿@model AssetManagement.Models.Dashboard
+@using Newtonsoft.Json
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+}
+
+<div class="d-flex flex-column">
+    <div class="cardBox">
+        <div class="card">
+            <div>
+                <div class="numbers">@Model.AvailableAssetCount</div>
+                <div class="cardName">Total Assets</div>
+            </div>
+            <div class="iconBx">
+                <ion-icon name="eye-outline"></ion-icon>
+            </div>
+        </div>
+        <div class="card">
+            <div>
+                <div class="numbers">@Model.AllocatedAssetCount</div>
+                <div class="cardName">Allocated Assets</div>
+            </div>
+            <div class="iconBx">
+                <ion-icon name="cart-outline"></ion-icon>
+            </div>
+        </div>
+        <div class="card">
+            <div>
+                <div class="numbers">@Model.MaintenanceAssetCount</div>
+                <div class="cardName">Maintenance</div>
+            </div>
+            <div class="iconBx">
+                <ion-icon name="chatbubbles-outline"></ion-icon>
+            </div>
+        </div>
+        <div class="card">
+            <div>
+                <div class="numbers">@Model.FreeAssetCount</div>
+                <div class="cardName">Free Assets</div>
+            </div>
+            <div class="iconBx">
+                <ion-icon name="cash-outline"></ion-icon>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="graphs text-center bg-light">
+                    <div class="m-5">
+                        <h4>Count of Assets Allocated</h4>
+                        <canvas id="subcategoriesChart" style="position: relative; width: 100%; height: 465px;"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="graphs text-center  bg-light">
+                    <div class="m-5">
+                        <h4>Department Wise Asset Allocation</h4>
+                        <canvas id="pieChart" style=" position: relative; width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="graphs text-center  bg-light">
+                    <div class="m-5">
+                        <h4>Assets Allocated Per Year</h4>
+                        <canvas id="assetAllocationsChart" style="position: relative; width: 100%;height: 420px;"></canvas>
+                    </div>
+                </div>
+            </div>
+            @*  <div class="col-md-6">
+                    <div class="graphs text-center  bg-light">
+                        <div class="m-5">
+                            <h4>Asset Allocation Per Year</h4>
+                            <canvas id="assetAllocationsChart2" style=" position: relative; width: 100%;height: 350px;"></canvas>
+                        </div>
+                    </div>
+                </div> *@
+        </div>
+    </div>
+
+
+</div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.min.js"></script>
+
+    <script>
+
+        var subcategoriesCount = @Html.Raw(JsonConvert.SerializeObject(Model.SubcategoriesCount));
+        var assetAllocationsPerYear = @Html.Raw(JsonConvert.SerializeObject(Model.AssetAllocationsPerYear));
+
+        var labelDepartmentNames = @Html.Raw(Json.Serialize(Model.DepartmentNames));
+        var allocationCounts = @Html.Raw(Json.Serialize(Model.AllocationCounts));
+
+    </script>
+    <script src="~/js/dashboard.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,13 @@
+/.github
+/.vs
+/.vscode
+
+
+
+
+/AssetManagement/.vscode
+/AssetManagement/obj
+/AssetManagement/bin
+/AssetManagement/appsettings.json
+
+

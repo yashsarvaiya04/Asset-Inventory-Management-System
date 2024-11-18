@@ -1,0 +1,344 @@
+﻿@model List<AssetManagement.Models.Asset>
+@{
+    ViewData["Title"] = "Asset";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/asset.css" />
+}
+
+<div class="nav-info">
+    <a class="nav-text" asp-action="Dashboard" asp-controller="Home">
+        <ion-icon name="home-outline"></ion-icon>
+    </a>
+    <ion-icon name="chevron-forward-outline"></ion-icon>
+    <a class="nav-text" asp-action="Asset" asp-controller="Home">
+        <span>Assets</span>
+    </a>
+
+</div>
+<div class="nav-container">
+    <h2 class="nav-title">Assets</h2>
+</div>
+<div class="container" style="padding-left:0px;">
+    <div id="grid"></div>
+
+</div>
+<div class="modal fade" id="editAssetModal" tabindex="-1" role="dialog" aria-labelledby="editAssetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAssetModalLabel">Edit Asset</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editAssetForm">
+                    <input type="hidden" id="editAssetid" name="EditAssetId">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editSerialNo" class="form-label">
+                                Asset Serial No: <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="editSerialNo" name="EditSerialNo" >
+                            <span id="ErrorEditSerialNo" class="error-message text-danger"></span>
+                        </div>
+                        <div class="col">
+                            <label for="editAssetName" class="form-label">
+                                Asset Name: <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="editAssetName" name="editAssetName">
+                            <span id="ErrorEditAssetName" class="error-message text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editCId" class="form-label">
+                                Category: <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control" id="editCId" name="editCId">
+                                <option value="">Select Category</option>
+                            </select>
+                            <span id="ErrorEditCId" class="error-message text-danger"></span>
+                        </div>
+                        <div class="col">
+                            <label for="editSubcategoryId" class="form-label">
+                                Subcategory: <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control" id="editSubcategoryId" name="editSubcategoryId">
+                                <option value="">Select Subcategory</option>
+                            </select>
+                            <span id="ErrorEditSubcategoryId" class="error-message text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editManufactureId" class="form-label">
+                                Manufacturer: <span class="text-danger">*</span>
+                            </label>
+                            <select id="editManufactureId" name="editManufactureId" class="form-control">
+                                <option value="">Select Manufacturer</option>
+                            </select>
+                            <span id="ErrorEditManufactureId" class="error-message text-danger"></span>
+                        </div>
+                        <div class="col">
+                            <label for="editSupplierId" class="form-label">
+                                Supplier: <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control" id="editSupplierId" name="editSupplierId">
+                                <option value="">Select Supplier</option>
+                            </select>
+                            <span id="ErrorEditSupplierId" class="error-message text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editLocationId" class="form-label">
+                                Location: <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control" id="editLocationId" name="editLocationId">
+                                <option value="">Select Location</option>
+                            </select>
+                            <span class="error-message text-danger" id="ErrorEditLocationId"></span>
+                        </div>
+                        <div class="col">
+                            <label for="editPurchaseDate" class="form-label">
+                                Purchase Date: <span class="text-danger">*</span>
+                            </label>
+                            <input type="date" class="form-control" id="editPurchaseDate" name="editPurchaseDate">
+                            <span id="ErrorEditPurchaseDate" class="error-message text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editPrice" class="form-label">
+                                Price: <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="editPrice" name="editPrice">
+                            <span id="ErrorEditPrice" class="error-message text-danger"></span>
+                        </div>
+                        <div class="col">
+                            <label for="editWarranty" class="form-label">Warranty:</label>
+                            <input type="date" class="form-control reduced-width" id="editWarranty" name="editWarranty">
+                            <span id="ErrorEditWarranty" class="error-message text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="editAssetImage" class="form-label">Upload New Image:</label>
+                            <input type="file" class="form-control" id="editAssetImage" name="editAssetImage" style="width: 50%;">
+                            <span id="ErrorEditAssetImage" class="error-message text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 preview-column d-none">
+                        <div class="col">
+                            <img id="imagePreview" src="#" alt="Preview" class="showModalImage" style="max-width: 100%; max-height: 200px;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn all-button" id="editBtnSave">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteAssetModal" tabindex="-1" role="dialog" aria-labelledby="deleteAssetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteAssetModalLabel">Delete Asset</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteAssetForm">
+                    <input type="hidden" id="deleteAssetId" name="deleteAssetId">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deleteAssetSerialNo" class="form-label">Asset Serial No</label>
+                            <input type="text" class="form-control" id="deleteAssetSerialNo" name="deleteAssetSerialNo" readonly />
+                        </div>
+                        <div class="col">
+                            <label for="deleteAssetName" class="form-label">Asset Name:</label>
+                            <input type="text" class="form-control" id="deleteAssetName" name="deleteAssetName" readonly />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deleteCategoryId" class="form-label">Category:</label>
+                            <input type="text" class="form-control" id="deleteCategoryId" name="deleteCategoryId" readonly />
+                        </div>
+                        <div class="col">
+                            <label for="deleteSubcategoryId" class="form-label">Subcategory:</label>
+                            <input type="text" class="form-control" id="deleteSubcategoryId" name="deleteSubcategoryId" readonly />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deleteManufactureId" class="form-label">Manufacturer:</label>
+                            <input type="text" class="form-control" id="deleteManufactureId" name="deleteManufactureId" readonly />
+                        </div>
+                        <div class="col">
+                            <label for="deleteSupplierId" class="form-label">Supplier:</label>
+                            <input type="text" class="form-control" id="deleteSupplierId" name="deleteSupplierId" readonly />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="deletePrice" class="form-label">Price:</label>
+                            <input type="text" class="form-control" id="deletePrice" name="deletePrice" readonly />
+                        </div>
+                        <div class="col">
+                            <label for="deletePurchaseDate" class="form-label">Purchase Date:</label>
+                            <input type="date" class="form-control" id="deletePurchaseDate" name="deletePurchaseDate" readonly />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn all-button" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAssetModalLabel">Add Asset</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addAssetForm">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="assetSerialNo" class="form-label">
+                                Asset Serial No: <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="assetSerialNo" name="assetSerialNo">
+                            <span class="error-message text-danger" id="ErrorAssetSerialNo"></span>
+                        </div>
+                        <div class="col">
+                            <label for="addAssetname" class="form-label">
+                                Asset Name: <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="addAssetname" name="addAssetname">
+                            <span class="error-message text-danger" id="ErrorAssetName"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addCategoryId" class="form-label">
+                                Category: <span class="text-danger">*</span>
+                            </label>
+                            <select id="addCategoryId" name="addCategoryId" class="form-control">
+                                <option value="">Select Category</option>
+                            </select>
+                            <span class="error-message text-danger" id="ErrorCategoryId"></span>
+                        </div>
+                        <div class="col">
+                            <label for="addSubcategoryId" class="form-label">
+                                Subcategory: <span class="text-danger">*</span>
+                            </label>
+                            <select id="addSubcategoryId" name="addSubcategoryId" class="form-control">
+                                <option value="">Select Subcategory</option>
+                            </select>
+                            <span class="error-message text-danger" id="ErrorSubcategoryId"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addManufactureId" class="form-label">
+                                Manufacturer: <span class="text-danger">*</span>
+                            </label>
+                            <select id="addManufactureId" name="addManufactureId" class="form-control">
+                                <option value="">Select Manufacturer</option>
+                            </select>
+                            <span class="error-message text-danger" id="ErrorManufactureId"></span>
+                        </div>
+                        <div class="col">
+                            <label for="addSupplierId" class="form-label">
+                                Supplier: <span class="text-danger">*</span>
+                            </label>
+                            <select id="addSupplierId" name="addSupplierId" class="form-control">
+                                <option value="">Select Supplier</option>
+                            </select>
+                            <span class="error-message text-danger" id="ErrorSupplierId"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addLocationId" class="form-label">
+                                Location: <span class="text-danger">*</span>
+                            </label>
+                            <select id="addLocationId" name="addLocationId" class="form-control">
+                                <option value="">Select Location</option>
+                            </select>
+                            <span class="error-message text-danger" id="ErrorLocationId"></span>
+                        </div>
+                        <div class="col">
+                            <label for="addPurchaseDate" class="form-label">
+                                Purchase Date: <span class="text-danger">*</span>
+                            </label>
+                            <input type="date" class="form-control" id="addPurchaseDate" name="addPurchaseDate">
+                            <span class="error-message text-danger" id="ErrorPurchaseDate"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addWarranty" class="form-label">Warranty:</label>
+                            <input type="date" class="form-control" id="addWarranty" name="addWarranty">
+                            <span class="error-message text-danger" id="ErrorWarranty"></span>
+                        </div>
+                        <div class="col">
+                            <label for="addPrice" class="form-label">
+                                Price: <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="addPrice" name="addPrice">
+                            <span class="error-message text-danger" id="ErrorPrice"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="addAssetImage" class="form-label">Asset Image:</label>
+                            <input type="file" class="form-control" id="addAssetImage" name="addAssetImage" style="width: 50%;">
+                        </div>
+                    </div>
+                   
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn all-button" id="saveAssetBtn">Add Asset</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+
+    <script>
+        var AssetData = @Html.Raw(ViewData["AssetJson"]);
+    </script>
+    <script src="~/js/asset.js" asp-append-version="true"></script>
+}

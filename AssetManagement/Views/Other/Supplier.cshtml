@@ -1,0 +1,117 @@
+﻿@model List<AssetManagement.Models.Supplier>
+@{
+    ViewData["Title"] = "Suppliers";
+}
+
+
+
+<div class="nav-info">
+    <a class="nav-text" asp-action="Dashboard" asp-controller="Home">
+        <ion-icon name="home-outline"></ion-icon>
+    </a>
+    <ion-icon name="chevron-forward-outline"></ion-icon>
+    <a class="nav-text" asp-action="Supplier" asp-controller="Other">
+        <span>Suppliers</span>
+    </a>
+
+</div>
+<div class="nav-container">
+    <h2 class="nav-title">Suppliers</h2>
+</div>
+
+<div class="container-fluid">
+    <div id="grid"></div>
+</div>
+
+
+<div class="modal fade" id="supplierModal" tabindex="-1" role="dialog" aria-labelledby="supplierModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSupplierModalLabel">Supplier</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="supplierModalForm">
+                    <input type="number" class="form-control " id="supplierId" hidden>
+                    <div class="row mb-3">
+                        <div class="col-md">
+                            @* <label for="supplierName" class="form-label">Supplier Name:</label> *@
+                            <label for="supplierName" class="form-label">Supplier:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="text" class="form-control" id="supplierName" name="supplierName">
+                        </div>
+                        <div class="col-md">
+                            @* <label for="supplierEmail" class="form-label">Supplier Email:</label> *@
+                            <label for="supplierEmail" class="form-label">Supplier Email:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="email" class="form-control" id="supplierEmail" name="supplierEmail">
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md">
+                            <label for="supplierPhoneNumber" class="form-label">Supplier PhoneNumber:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <input type="tel" class="form-control" id="supplierPhoneNumber" name="supplierPhoneNumber" required>
+                        </div>
+                        <div class="col-md">
+                            <label for="countryId" class="form-label">Country:</label>
+                            <select class="form-control" id="countryId" name="countryId">
+                                <option value="">Select Country</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md">
+                            <label for="stateId" class="form-label">State:</label>
+                            <select class="form-control" id="stateId" name="stateId" disabled>
+                                <option value="">Select Country First</option>
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <label for="cityId" class="form-label">City:</label>
+                            <select class="form-control" id="cityId" name="cityId" disabled>
+                                <option value="">Select State First</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md">
+                            <label for="supplierAddress" class="form-label">Supplier Adddress:<span class="text-danger"> </span></label>
+                            <span class="text-danger"> *</span>
+                            <textarea type="text" class="form-control" id="supplierAddress" name="supplierAddress"></textarea>
+                        </div>
+                        <div class="col-md">
+                            <div class="row">
+                                <div class="col-md">
+                                    <label for="supplierImage" class="form-label">Image:</label>
+                                    <input type="file" class="form-control " id="supplierImage">
+                                </div>
+                               
+                                    <div id="imagePreviewDiv" class="col-md text-center" hidden>
+                                        <img id="imagePreview" src="#" onerror="this.onerror=null;this.src='~/images/locationDummyImage.jpg';" class="showModalImage" alt="Image Preview" style="max-width: 100%; max-height: 150px;">
+                                    </div>
+                             
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="all-button btn btn-primary" id="supplierModalUpdate" aria-label="Update">Update</button>
+                <button type="button" class="all-button btn btn-primary" id="supplierModalSubmit" aria-label="Submit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const suppliersData = @Html.Raw(Json.Serialize(Model));
+    </script>
+    <script src="~/js/supplier.js" asp-append-version="true"></script>
+}

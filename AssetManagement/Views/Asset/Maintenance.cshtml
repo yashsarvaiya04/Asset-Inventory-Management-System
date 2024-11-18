@@ -1,0 +1,104 @@
+﻿@model AssetManagement.Models.Maintenance
+@using Microsoft.AspNetCore.Http
+@using System.Text.Json;
+@inject IHttpContextAccessor HttpContextAccesssor
+@{
+    ViewData["Title"] = "Maintenance";
+}
+
+
+
+<div class="nav-info">
+    <a class="nav-text" asp-action="Dashboard" asp-controller="Home">
+        <ion-icon name="home-outline"></ion-icon>
+    </a>
+    <ion-icon name="chevron-forward-outline"></ion-icon>
+    <a class="nav-text" asp-action="Maintenance" asp-controller="Asset">
+        <span>Maintenance</span>
+    </a>
+
+</div>
+<div class="nav-container">
+    <h2 class="nav-title">Maintenance</h2>
+</div>
+
+<div class="container">
+    <div id="grid"></div>
+</div>
+
+
+<div class="modal fade" id="MaintenanceModal" tabindex="-1" role="dialog" aria-labelledby="MaintenanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="MaintenanceModalLabel">Maintenance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="MaintenanceForm">
+                    <input type="number" class="form-control " id="maintenanceId" hidden>
+
+                    <div class="row mb-3">
+                        <div class="col-md">
+                            <label for="categoryId" class="form-label">Category Name:</label>
+                            <select class="form-control" id="categoryId" name="categoryId">
+                                <option value="" disabled selected>Select Category</option>
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <label for="subCategoryId" class="form-label">Sub Category Name:</label>
+                            <select class="form-control" id="subCategoryId" name="subCategoryId">
+                                <option value="" disabled selected>Select Sub Category</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="row mb-3">
+                        <div class="col-md">
+                            <label for="assetId" class="form-label">Asset Name:</label>
+                            <select class="form-control" id="assetId" name="assetId">
+                                <option value="" disabled selected>Select Asset</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="Description" class="form-label">Description:</label>
+                            <input type="text" class="form-control" id="Description" name="Description">
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="ScheduleDate" class="form-label">Schedule Date:</label>
+                            <input type="date" class="form-control" id="ScheduleDate", name="ScheduleDate">
+                        </div>
+                        <div class="col">
+                            <label for="CompletionDate" class="form-label">Completion Date:</label>
+                            <input type="date" class="form-control" id="CompletionDate" name="CompletionDate">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                <button type="button" class="all-button btn btn-primary" id="MaintenanceModalUpdate" aria-label="Update">Update</button>
+                <button type="button" class="all-button btn btn-primary" id="MaintenanceModalSubmit" aria-label="Submit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+        var modifiedId = @Html.Raw(JsonSerializer.Serialize(HttpContextAccesssor.HttpContext!.Session.GetString("EmployeeId")));
+        var maintenanaceData = @Html.Raw(ViewData["MaintenanceJson"]);
+    </script>
+    <script src="~/js/maintenance.js" asp-append-version="true"></script>
+
+}

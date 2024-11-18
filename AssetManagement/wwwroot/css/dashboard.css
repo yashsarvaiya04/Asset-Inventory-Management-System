@@ -1,0 +1,163 @@
+﻿.cardBox {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 25px;
+}
+
+    .cardBox .card {
+        position: relative;
+        background: var(--white);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+        display: flex;
+        justify-content: space-between;
+        
+    }
+
+        .cardBox .card .numbers {
+            position: relative;
+            font-weight: 500;
+            font-size: 2.5em;
+            color: var(--blue);
+        }
+
+        .cardBox .card .cardName {
+            color: var(--black2);
+            font-size: 1.1em;
+            margin-top: 5px;
+        }
+
+        .cardBox .card .iconBx {
+            font-size: 3.3em;
+            color: var(--black2);
+        }
+
+        .cardBox .card:hover {
+            background: var(--blue);
+        }
+
+            .cardBox .card:hover .numbers,
+            .cardBox .card:hover .cardName,
+            .cardBox .card:hover .iconBx {
+                color: var(--white);
+            }
+
+
+
+/* Override the default positioning of carousel control icons */
+.carousel-control-prev,
+.carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: auto;
+    right:30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.5; /* Adjust opacity as needed */
+    transition: opacity 0.3s ease;
+}
+
+/* Style for the carousel control icons */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    /* Customize the appearance of the icons if needed */
+    background-color: rgba(54, 162, 235, 0.5);
+    border-radius: 50%; /* Make it circular if needed */
+}
+
+/* Hover effect for the carousel control icons */
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1; /* Show icons with full opacity on hover */
+}
+
+@media screen and (max-width: 991px) {
+    .navigation {
+        left: -300px;
+    }
+
+        .navigation.active {
+            width: 300px;
+            left: 0;
+        }
+
+    .main {
+        width: 100%;
+        left: 0;
+    }
+
+        .main.active {
+            left: 300px;
+        }
+
+    .cardBox {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media screen and (max-width: 768px) {
+
+
+    .details {
+        grid-template-columns: repeat(1,1fr);
+    }
+
+    .recentOrder {
+        overflow-x: auto;
+    }
+
+        .recentOrder .inprogress {
+            white-space: nowrap;
+        }
+}
+
+@media screen and (max-width: 480px) {
+
+
+    .cardBox {
+        grid-template-columns: repeat(1,1fr);
+    }
+
+    .cardHeader h2 {
+        font-size: 20px;
+    }
+
+    .user {
+        min-width: 50px;
+    }
+
+    .navigation {
+        width: 100%;
+        left: -100%;
+        z-index: 1000;
+    }
+
+        .navigation.active {
+            width: 100%;
+            left: 0;
+        }
+
+    .toggle {
+        z-index: 10001;
+    }
+
+    .main.active .toggle {
+        position: fixed;
+        right: 0;
+        color: var(--white);
+    }
+}
+
+@media screen and (min-width:320px) {
+    .main.active .toggle {
+        position: relative;
+    }
+}

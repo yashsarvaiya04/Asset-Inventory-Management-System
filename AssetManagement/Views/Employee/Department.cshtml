@@ -1,0 +1,84 @@
+﻿@model List<AssetManagement.Models.Department>
+@{
+    ViewData["Title"] = "Asset Allocation";
+}
+
+<h2 class="assetAllocation-title">Asset Allocation</h2>
+<div class="container-fluid">
+    <div id="grid"></div>
+</div>
+
+
+
+<div class="modal fade" id="assetAllocationModal" tabindex="-1" role="dialog" aria-labelledby="assetAllocationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assetAllocationModalLabel">Asset Allocation</h5>
+                <input type="number" class="form-control " id="allocationId" required hidden>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="assetAllocationModalForm">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label for="departmentName" class="form-label">Deparment Name:</label>
+                            <input type="number" class="form-control " id="departmentId" required hidden>
+                            <input type="text" class="form-control " id="departmentName" autocomplete="off">
+                        </div>
+                        <div class="col-6">
+                            <label for="employeeName" class="form-label">Employee Name:</label>
+                            <input type="number" class="form-control " id="employeeId" required hidden>
+                            <input type="text" class="form-control" id="employeeName" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="categoryId" class="form-label">Category Name:</label>
+                            <input type="number" class="form-control " id="categoryId" required hidden>
+                            <input type="text" class="form-control" id="categoryName" autocomplete="off">
+                        </div>
+                        <div class="col">
+                            <label for="subCategoryName" class="form-label">Sub Category Name:</label>
+                            <input type="number" class="form-control " id="subCategoryId" required hidden>
+                            <input type="text" class="form-control" id="subCategoryName" autocomplete="off">
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="assetName" class="form-label">Asset Name:</label>
+                            <input type="number" class="form-control " id="assetId" required hidden>
+                            <input type="text" class="form-control" id="assetName">
+                        </div>
+                        <div class="row col">
+                            <div class="col">
+                                <label for="assignedDate" class="form-label">Assigned date:</label>
+                                <input type="date" class="form-control" id="assignedDate">
+                            </div>
+                            <div class="col freeDate" hidden>
+                                <label for="freeDate" class="form-label">Free date:</label>
+                                <input type="date" class="form-control" id="freeDate">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="assetAllocationModalUpdate">Update</button>
+                <button type="button" class="btn btn-primary" id="assetAllocationModalSubmit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        const assetAllocationData = @Html.Raw(Json.Serialize(Model));
+    </script>
+    <script src="~/js/department.js" asp-append-version="true"></script>
+}

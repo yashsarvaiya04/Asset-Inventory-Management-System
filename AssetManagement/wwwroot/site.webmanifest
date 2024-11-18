@@ -1,0 +1,28 @@
+{
+  "name": "Amnex Asset Management System",
+  "short_name": "AAMS",
+  "start_url": "/home/LoginPage",
+  "orientation": "portrait",
+  "theme_color": "black",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "./images/assetManagementlogo144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/assetManagementlogo192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./images/assetManagementlogo512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "sweetalert2@11.10.7",
+      "destination": "wwwroot/sweetalert2/"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/select2/"
+    },
+    {
+      "library": "ionicons@7.3.1",
+      "destination": "wwwroot/ionicons/"
+    },
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "quagga@0.12.1",
+      "destination": "wwwroot/quagga/"
+    }
+  ]
+}
